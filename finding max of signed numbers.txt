@@ -1,0 +1,38 @@
+;Find the maximum of 16 signed numbers located in the RAM
+;starting at 30h to 3Fh
+	ORG 0000h
+
+	MOV R0, #30h
+	MOV R4, #16
+	MOV R5, #00h ; max so far positive
+	MOV R6, #0FFh ; max so far negative
+	MOV R7, #00h ; overall max
+NEXT:	MOV A, @R0
+	INC R0
+	CJNE A, #10000000b, $ + 3
+	JNC ABS
+	CJNE A, 5, $ + 3
+	JC SKIPP
+	MOV R5, A
+	SJMP SKIPP
+
+	
+SKIPP:	DJNZ R4, NEXT
+	SJMP FINAL
+
+ABS:	CPL A
+	ADD A, #1
+	CJNE A, 6, $ + 3
+	JNC SKIPP
+	MOV R6, A
+	SJMP SKIPP
+
+FINAL:
+	CJNE R5, #01h, $ + 3
+	JC DONE
+	MOV R7, 5
+	SJMP TERMINATE
+
+DONE:	MOV R7, 6
+TERMINATE:
+	END

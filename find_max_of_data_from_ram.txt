@@ -1,0 +1,39 @@
+;Write a subroutine to return the minimum (or
+;maximum) of 16 unsigned (or signed) 8 bit
+;numbers located beginning at internal RAM
+;locatation 50h.
+
+;**Data for the simulation
+	ORG 0000h
+	MOV A, #10
+	MOV R0, #35h
+WRITE:	MOV @R0, A
+	DEC A
+	INC R0
+	CJNE A, #4, WRITE
+;***********
+	MOV @R0, #29
+	CLR A
+
+
+MAIN: 	ACALL MAX
+	ACALL TERMINATE
+	
+
+MAX:	MOV R0, #35h
+	MOV R3, #16
+	MOV A, @R0 
+	INC R0
+	DEC R3
+	MOV R2, A ;R2 = MAX
+NEXT:	MOV A, @R0
+	INC R0
+	CJNE A, 2, MAYBE
+DE:	DJNZ R3, NEXT
+	SJMP EXIT
+MAYBE:	JC DE
+	MOV R2, A
+	SJMP DE 
+EXIT:	RET
+TERMINATE:
+	END

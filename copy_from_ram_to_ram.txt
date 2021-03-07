@@ -1,0 +1,24 @@
+;Write a program to copy a block of 10 bytes of data from
+;RAM locations starting at 35H to RAM locations starting
+;at 60H.
+
+;**Data for the simulation
+	ORG 0000h
+	MOV A, #20
+	MOV R0, #35h
+WRITE:	MOV @R0, A
+	DEC A
+	INC R0
+	CJNE A, #10, WRITE
+;***********
+
+	CLR A
+	
+	MOV R0, #35h
+	MOV R1, #60h
+AGAIN:	MOV A, @R0
+	MOV @R1, A
+	INC R1
+	INC R0
+	CJNE R0, #3Fh, AGAIN
+	END
